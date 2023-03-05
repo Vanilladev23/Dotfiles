@@ -2,8 +2,21 @@ add_newline = true
 
 [hostname]
 ssh_only = false
-format = "[$hostname](bold yellow) "
+format = "[$hostname](bold green) "
 disabled = false
+
+[battery]
+full_symbol = "🔋"
+charging_symbol = "🔌"
+
+[[battery.display]]
+threshold = 30
+style = 'bold yellow'
+discharging_symbol = '💦'
+
+[cmd_duration]
+min_time = 10_000
+format = " took [$duration]($style)"
 
 [time]
 disabled = false
@@ -13,16 +26,16 @@ time_format = '%T'
 
 [memory_usage]
 disabled = false
-threshold = -1
+threshold = 2
 symbol = '🌿 '
 style = 'bold blue'
-format = "[$symbol]($style)"
+format = "$symbol[${ram}( | ${swap})]($style) "
 
 [directory]
-truncation_length = 4
+truncation_length = 1
 truncation_symbol = '…/'
 read_only = '🍭'
-format = "at [$path]($style)[$read_only]($read_only_style) "
+format = "[$path]($style)[$lock_symbol]($lock_style) "
 
 [character]
 success_symbol = '[➜](bold green)'
@@ -40,7 +53,7 @@ truncation_length = 4
 truncation_symbol = ''
 
 [git_commit]
-commit_hash_length = 4
+commit_hash_length = 8
 tag_symbol = '🔖 '
 
 [git_metrics]
@@ -52,17 +65,18 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = '[🍒 PICKING](bold red)'
 
 [git_status]
-conflicted = '🏳'
-ahead = '🏎💨'
-behind = '😰'
-diverged = '😵'
-up_to_date = '✓'
-untracked = '🤷'
-stashed = '📦'
-modified = '📝'
-staged = '[++\($count\)](green)'
-renamed = '👅'
-deleted = '🗑'
+conflicted = "⚔️ "
+ahead = "🏎️ 💨 ×${count}"
+behind = "🐢 ×${count}"
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
+untracked = "🛤️  ×${count}"
+stashed = "📦 "
+modified = "📝 ×${count}"
+staged = "🗃️  ×${count}"
+renamed = "📛 ×${count}"
+deleted = "🗑️  ×${count}"
+style = "bright-white"
+format = "$all_status$ahead_behind"
 
 [java]
 symbol = '🌟 '
@@ -75,8 +89,16 @@ symbol = '🥅 '
 style = 'green'
 heuristic = false
 
+[python]
+symbol = '🐍 '
+pyenv_version_name = true
+
+[docker_context]
+format = 'via [🐳 $context](blue bold)'
+
 [rust]
 format = 'via [🦀 $version](red bold)'
 
 [package]
 format = 'via [📦 $version](208 bold) '
+disabled = true
